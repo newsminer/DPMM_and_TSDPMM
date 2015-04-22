@@ -33,30 +33,30 @@ public class DMM {
      }
      public void WriteInfor(BufferedWriter sw)
      {
-         /*第一行是numTopic
-          * 第二行是numDocuments
-           * 第三行是vocabularyIndex，每个词用####隔开
-           * 第四行是entityVocabularyIndex，每个实体用####隔开
-           * 第五行是Dictionary<string, int> vocabulary， string####int;;;;
-           * 第六行是Dictionary<string, int> entityVocabulary， string####int;;;;
+         /*1.numTopic
+          * 2.numDocuments
+           * 3.vocabularyIndex，separated by ``####''
+           * 4.entityVocabularyIndex
+           * 5.Dictionary<string, int> vocabulary， string####int;;;;
+           * 6.Dictionary<string, int> entityVocabulary， string####int;;;;
            * */
          try {
-			sw.write(topics.size()+"\r\n");//第一行m
-			sw.write(numDocuments+"\r\n");//第二行
+			sw.write(topics.size()+"\r\n");
+			sw.write(numDocuments+"\r\n");
 			StringBuilder sb = new StringBuilder();
 			int voSize = vocabularyIndex.size();
 			for (int i = 0; i < voSize; ++i)
 			{
 				sb.append(vocabularyIndex.get(i) + "#");
 			}
-			sw.write(sb.toString()+"\r\n");//第三行
+			sw.write(sb.toString()+"\r\n");
 
 			sb = new StringBuilder();
 			for (Entry<String, Integer> item: vocabulary.entrySet())
 			{
 				sb.append(item.getKey() + "#" + item.getValue() + ";;;;");
 			}
-			sw.write(sb.toString()+"\r\n");//第五行
+			sw.write(sb.toString()+"\r\n");
          } catch (IOException e) {
  			// TODO Auto-generated catch block
  			e.printStackTrace();
@@ -66,13 +66,13 @@ public class DMM {
      public  void writeNode(Topic node, BufferedWriter sw)
      {
          /*
-          * 第二行是ID
-          * 第三行是customers
-          * 第四行是wordCount
-          * 第五行是entityCount
-          * 第六行是ncrp
-          * 第七行是weights
-          * 第八行是children的个数
+          * 2.ID
+          * 3.customers
+          * 4.wordCount
+          * 5.entityCount
+          * 6.ncrp
+          * 7.weights
+          * 8.children number
           * 
           * */
         
@@ -106,7 +106,7 @@ public class DMM {
 			{
 				sb.append(i + " " + vocabularyIndex.get(i) + "\r\n");
 			}
-			bw_voc.write(sb.toString());//第五行
+			bw_voc.write(sb.toString());
 			bw_voc.close();
          } catch (IOException e) {
  			// TODO Auto-generated catch block
@@ -313,14 +313,14 @@ public class DMM {
     	 double[] logP = new double[all.size()+1];
          for (int i = 0; i < logP.length-1; i++)
          {
-             logP[i] = all.get(i).logCrp(currentDocuments) + posteriorLogPdf(doc,i) ; //weights如何得到？还要remove空的topic
+             logP[i] = all.get(i).logCrp(currentDocuments) + posteriorLogPdf(doc,i) ; 
          }
       
          logP[logP.length-1] =Math.log(Global.gamma)-Math.log(currentDocuments-1 + Global.gamma) +  posteriorLogPdf(doc,logP.length-1);
          
          int selected = SRS.sampleLog(logP); 
          
-         logP =null;  //释放内存
+         logP =null;  
          return selected;
          
          
@@ -484,7 +484,7 @@ public class DMM {
         		 temp+=topics.get(k).wordCount[v];
         		 
         	 }
-             topicTotalWords[k]=temp;   //要用之前的wordliklihood啊。。。
+             topicTotalWords[k]=temp;   
          }
               
          for (int i = 0; i < documents.size(); i++)
@@ -494,7 +494,7 @@ public class DMM {
              {
             	 int w_id = documents.get(i).words.get(w).index;
                  double pw = 0;
-                 pw = (documents.get(i).topic.wordCount[w_id]  + Global.beta) / (topicTotalWords[documents.get(i).topic.id]+ Global.vocabSize *Global.beta);   //要用之前的wordliklihood啊。。。
+                 pw = (documents.get(i).topic.wordCount[w_id]  + Global.beta) / (topicTotalWords[documents.get(i).topic.id]+ Global.vocabSize *Global.beta);   
                  
                  logDoc += Math.log(pw);
              }
@@ -558,7 +558,7 @@ public class DMM {
 			e.printStackTrace();
 		}
        // corpus.WriteTopicToFile_now(@"..\..\HLDA\topic-zhili.txt-now", perp);
-      //   corpus.WriteTopicToFile2(@"..\..\HLDA\1000topic-chile.txt",perp);//这个是必须的，因为Global.globalWordSize
+      //   corpus.WriteTopicToFile2(@"..\..\HLDA\1000topic-chile.txt",perp);
      }
     
 }
@@ -594,7 +594,7 @@ public class DMM {
 //                    }
 //                }
 //            }
-//            //把旧的词典根据新的词典扩充
+//           
 //            int temp = 0;
 //            if (node.wordCount != null)
 //            {
@@ -608,7 +608,7 @@ public class DMM {
 //                    }
 //                }
 //            }
-//            node.wordCount = tempWord;   //扩展后的词典存在wordCount中            
+//            node.wordCount = tempWord;              
 //
 //        }
 //
