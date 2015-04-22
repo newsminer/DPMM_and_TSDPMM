@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="IM" default="usage" basedir=".">
+	<description>Freepard.com Africa News Crawler Project</description>
+	
+	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="bin.dir" value="${basedir}/bin"/>
+	<property name="bin.dir" value="${basedir}/bin"/>
+	<property name="encoding" value="utf-8"/>
+	<property name="source.level" value="1.5"/>
+	<property name="target.level" value="1.5"/>
+	
+	<javac destdir="${temp.dir}/bin" classpathref="classpath" debug="on" optimize="off" includeantruntime="true" encoding="UTF-8">
+            <src path="${temp.dir}/source"/>
+    </javac>
+
+	<path id="cp">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		<pathelement location="${bin.dir}"/>
+	</path>
+	
+	<target name="usage">
+		<echo message="*******************************************************************"/>
+		<echo message="* Africa News Crawler project build file usage:                   *"/>
+		<echo message="*                                                                 *"/>
+		<echo message="*   TARGET        DESCRIPTION                                     *"/>
+		<echo message="*   usage         Display this help message.                      *"/>
+		<echo message="*   build         Build project code.                             *"/>
+		<echo message="*   debug         Run program in debug mode.                      *"/>
+		<echo message="*   run           Run program in normal mode.                     *"/>
+		<echo message="*   clean         Clean all compiled classes and resource files.  *"/>
+		<echo message="*                                                                 *"/>
+		<echo message="*******************************************************************"/>
+	</target>
+	
+	<!-- Create neccessary directories -->
+	<target name="prepare">
+		<mkdir dir="${bin.dir}"/>
+	</target>
+	
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" classpathref="cp"
+			encoding="${encoding}" source="${source.level}" target="${target.level}"
+			debug="true" fork="true"/>
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}" excludes="**/*.java **/*.properties"/>
+		</copy>
+		<native2ascii src="${src.dir}" dest="${bin.dir}" encoding="${encoding}" 
+			includes="**/*.properties"/>
+	</target>
+	
+	
+	<target name="DMMM" depends="compile">
+		<java classname="dmm.DMM" classpathref="cp" fork="true">
+		</java>
+	</target>
+	
+	<target name="build" depends="compile">
+	</target>
+	
+	<target name="clean">
+		<delete dir="${bin.dir}"/>
+	</target>
+</project>
